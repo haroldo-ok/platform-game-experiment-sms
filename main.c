@@ -61,7 +61,7 @@ unsigned int playerXOffset = 0;
 unsigned int playerYOffset = 0;
 unsigned char direction = DIRECTION_DOWN;
 
-unsigned char scrolltable[scrolltable_bin_size];
+unsigned char scrolltable[stage1_scrolltable_bin_size];
 
 SMS_EMBED_SEGA_ROM_HEADER(9999,1);	
 
@@ -72,8 +72,8 @@ void main(void)
 	
 	SMS_VRAMmemset(0x4000, 0x00, 0x4000);
 	SMS_VRAMmemset(0xC000, 0x00, 0x0020);
-	SMS_loadTiles(&tiles_bin, 0, tiles_bin_size);
-	SMS_loadBGPalette(&palette_bin);
+	SMS_loadTiles(&stage1_tiles_bin, 0, tiles_bin_size);
+	SMS_loadBGPalette(&stage1_palette_bin);
 	SMS_loadTiles(&sprite_tiles_bin, 256, sprite_tiles_bin_size);
 	SMS_loadSpritePalette(&sprite_palette_bin);
 	
@@ -82,10 +82,10 @@ void main(void)
 		// copy scrolltable to RAM
 		// NOTE: this allows us to modify the map for hightened player interaction
 		// in this case cutting down lots of trees, activating bridges, etc.
-		for (int i = 0; i < scrolltable_bin_size; i++) scrolltable[i] = *(scrolltable_bin + i);
+		for (int i = 0; i < stage1_scrolltable_bin_size; i++) scrolltable[i] = *(stage1_scrolltable_bin + i);
 		
 		// initalise General Scroll Library
-		GSL_initializeMap(&scrolltable, &metatiles_bin);
+		GSL_initializeMap(&scrolltable, &stage1_metatiles_bin);
 		GSL_positionWindow(768,832);
 		GSL_refreshVDP();
 		
