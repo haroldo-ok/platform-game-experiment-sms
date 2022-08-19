@@ -72,7 +72,7 @@ void main(void)
 	
 	SMS_VRAMmemset(0x4000, 0x00, 0x4000);
 	SMS_VRAMmemset(0xC000, 0x00, 0x0020);
-	SMS_loadTiles(&stage1_tiles_bin, 0, tiles_bin_size);
+	SMS_loadTiles(&stage1_tiles_bin, 0, stage1_tiles_bin_size);
 	SMS_loadBGPalette(&stage1_palette_bin);
 	SMS_loadTiles(&sprite_tiles_bin, 256, sprite_tiles_bin_size);
 	SMS_loadSpritePalette(&sprite_palette_bin);
