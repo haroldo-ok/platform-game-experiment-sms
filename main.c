@@ -47,6 +47,7 @@ unsigned int playerY = 928;
 unsigned char playerSpriteX = 136;
 unsigned char playerSpriteY = 96;
 unsigned char animationCount = 0;
+unsigned char playerIsOnGround = 0;
 fixed playerSpeedY;
 
 unsigned char actionCount = 0;
@@ -225,17 +226,21 @@ void processUserInput()
 		return;
 	}
 	
-	if (ks & PORT_A_KEY_1) playerSpeedY.w -= 0x200;
+	if (playerIsOnGround && (ks & PORT_A_KEY_1)) playerSpeedY.w -= 0x400;
 	
 	playerSpeedY.w += 128;
 	if (playerSpeedY.w > TERMINAL_VELOCITY) playerSpeedY.w = TERMINAL_VELOCITY;
 	
+	playerIsOnGround = 0;
 	if (playerSpeedY.b.h < 0) {
 		processUpKey(-playerSpeedY.b.h);
 		if (!playerYOffset) playerSpeedY.w = 0;
 	} else if (playerSpeedY.b.h > 0) {
 		processDownKey(playerSpeedY.b.h);
-		if (!playerYOffset) playerSpeedY.w = 0;
+		if (!playerYOffset) {
+			playerSpeedY.w = 0;
+			playerIsOnGround = 1;
+		}
 	}
 }
 
