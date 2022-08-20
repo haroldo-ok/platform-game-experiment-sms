@@ -27,7 +27,7 @@
 #define METATILE_VERTICAL_BRIDGE			16
 #define METATILE_GRASS						89
 
-#define TERMINAL_VELOCITY (0x400)
+#define TERMINAL_VELOCITY (0x700)
 
 
 
@@ -226,7 +226,7 @@ void processUserInput()
 		return;
 	}
 	
-	if (playerIsOnGround && (ks & PORT_A_KEY_1)) playerSpeedY.w -= 0x400;
+	if (playerIsOnGround && (ks & PORT_A_KEY_1)) playerSpeedY.w -= 0x700;
 	
 	playerSpeedY.w += 128;
 	if (playerSpeedY.w > TERMINAL_VELOCITY) playerSpeedY.w = TERMINAL_VELOCITY;
@@ -270,7 +270,7 @@ void processUpKey(char offset)
 		action = ACTION_MOVE;
 		direction = DIRECTION_UP;
 		animationCount = (animationCount - 1) & 3;
-		actionCount = 4;
+		actionCount = 0;
 		spriteTileOffsets = spriteMoveUp;
 		
 		scrollXOffset = 0;
@@ -285,6 +285,7 @@ void processUpKey(char offset)
 	
 	// Quality of life code. If the path up is clipped on one side only have the player
 	// shift to the left or right so they can continue up.
+	/*
 	if ((metatilesMetaLUT[topLeftMetatile] & 1) == 1 && (metatilesMetaLUT[topRightMetatile] & 1)  == 0)
 	{
 		processLeftKey();
@@ -295,12 +296,13 @@ void processUpKey(char offset)
 		processRightKey();
 		return;
 	}
+	*/
 	
 	// Movement up is passable. Process movement
 	action = ACTION_MOVE;
 	direction = DIRECTION_UP;
 	animationCount = (animationCount - 1) & 3;
-	actionCount = 4;
+	actionCount = 0;
 	spriteTileOffsets = spriteMoveUp;
 	
 	scrollXOffset = 0;
@@ -348,7 +350,7 @@ void processDownKey(char offset)
 		action = ACTION_MOVE;
 		direction = DIRECTION_DOWN;
 		animationCount = (animationCount - 1) & 3;
-		actionCount = 4;
+		actionCount = 0;
 		spriteTileOffsets = spriteMoveDown;
 		
 		scrollXOffset = 0;
@@ -363,6 +365,7 @@ void processDownKey(char offset)
 	
 	// Quality of life code. If the path down is clipped on one side only have the player
 	// shift to the left or right so they can continue down.
+	/*
 	if ((metatilesMetaLUT[bottomLeftMetatile] & 1) == 1 && (metatilesMetaLUT[bottomRightMetatile] & 1) == 0)
 	{
 		processLeftKey();
@@ -373,12 +376,13 @@ void processDownKey(char offset)
 		processRightKey();
 		return;
 	}
+	*/
 	
 	// Movement down is passable. Process movement
 	action = ACTION_MOVE;
 	direction = DIRECTION_DOWN;
 	animationCount = (animationCount - 1) & 3;
-	actionCount = 4;
+	actionCount = 0;
 	spriteTileOffsets = spriteMoveDown;
 	
 	scrollXOffset = 0;
