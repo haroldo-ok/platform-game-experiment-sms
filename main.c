@@ -27,6 +27,8 @@
 #define METATILE_VERTICAL_BRIDGE			16
 #define METATILE_GRASS						89
 
+#define TERMINAL_VELOCITY (0x400)
+
 
 
 void processSpritesActiveDisplay();
@@ -226,6 +228,8 @@ void processUserInput()
 	if (ks & PORT_A_KEY_1) playerSpeedY.w -= 0x200;
 	
 	playerSpeedY.w += 128;
+	if (playerSpeedY.w > TERMINAL_VELOCITY) playerSpeedY.w = TERMINAL_VELOCITY;
+	
 	if (playerSpeedY.b.h < 0) {
 		processUpKey(-playerSpeedY.b.h);
 		if (!playerYOffset) playerSpeedY.w = 0;
@@ -238,13 +242,24 @@ void processUserInput()
 
 void processUpKey(char offset)
 {
-	// lookup metatile directly above player
-	// NOTE: hitbox of player is 2 tiles wide, we need to make 2 metatile checks.
-	unsigned char topLeftMetatile = *(GSL_metatileLookup(playerX - 8, playerY - 1));
-	unsigned char topRightMetatile = *(GSL_metatileLookup(playerX + 7, playerY - 1));
+	unsigned char topLeftMetatile = 0;
+	unsigned char topRightMetatile = 0;
+	unsigned char isBlocked = 1;
 	
-	// Is movement up blocked via metatile or end of screen?
-	if (playerY == 8 || ((metatilesMetaLUT[topLeftMetatile] & 1) == 0 && (metatilesMetaLUT[topRightMetatile] & 1)  == 0))
+	while (offset && isBlocked) {
+		// lookup metatile directly above player
+		// NOTE: hitbox of player is 2 tiles wide, we need to make 2 metatile checks.
+		topLeftMetatile = *(GSL_metatileLookup(playerX - 8, playerY + 1 - offset));
+		topRightMetatile = *(GSL_metatileLookup(playerX + 7, playerY + 1 - offset));
+		
+		// Is movement up blocked via metatile or end of screen?
+		isBlocked = playerY == 8 || ((metatilesMetaLUT[topLeftMetatile] & 1) == 0 && (metatilesMetaLUT[topRightMetatile] & 1)  == 0);
+		
+		// If is blocked, try a smaller offset
+		if (isBlocked) offset--;
+	}
+	
+	if (isBlocked)
 	{
 		// animate but do not move.
 		action = ACTION_MOVE;
@@ -305,13 +320,24 @@ void processUpKey(char offset)
 
 void processDownKey(char offset)
 {
-	// lookup metatile directly below player
-	// NOTE: hitbox of player is 2 tiles wide, we need to make 2 metatile checks.
-	unsigned char bottomLeftMetatile = *(GSL_metatileLookup(playerX - 8, playerY + 8));
-	unsigned char bottomRightMetatile = *(GSL_metatileLookup(playerX + 7, playerY + 8));
+	unsigned char bottomLeftMetatile = 0;
+	unsigned char bottomRightMetatile = 0;
+	unsigned char isBlocked = 1;
+
+	while (offset && isBlocked) {
+		// lookup metatile directly below player
+		// NOTE: hitbox of player is 2 tiles wide, we need to make 2 metatile checks.
+		bottomLeftMetatile = *(GSL_metatileLookup(playerX - 8, playerY + 6 + offset));
+		bottomRightMetatile = *(GSL_metatileLookup(playerX + 7, playerY + 6 + offset));
+		
+		// Is movement down blocked via metatile or end of screen?
+		isBlocked = playerY == GSL_getMapHeightInPixels() - 8 || ((metatilesMetaLUT[bottomLeftMetatile] & 1) == 0 && (metatilesMetaLUT[bottomRightMetatile] & 1) == 0);
+
+		// If is blocked, try a smaller offset
+		if (isBlocked) offset--;
+	}
 	
-	// Is movement down blocked via metatile or end of screen?
-	if (playerY == GSL_getMapHeightInPixels() - 8 || ((metatilesMetaLUT[bottomLeftMetatile] & 1) == 0 && (metatilesMetaLUT[bottomRightMetatile] & 1) == 0))
+	if (isBlocked)
 	{
 		// animate but do not move.
 		action = ACTION_MOVE;
