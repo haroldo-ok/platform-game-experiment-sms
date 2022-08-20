@@ -32,7 +32,7 @@
 void processSpritesActiveDisplay();
 void processSpritesVBlank();
 void processUserInput();
-void processUpKey();
+void processUpKey(char offset);
 void processDownKey(char offset);
 void processLeftKey();
 void processRightKey();
@@ -201,7 +201,7 @@ void processUserInput()
 	}
 	else if (ks & PORT_A_KEY_UP)
 	{
-		processUpKey();
+		processUpKey(2);
 		return;
 	}
 	
@@ -223,15 +223,20 @@ void processUserInput()
 		return;
 	}
 	
+	if (ks & PORT_A_KEY_1) playerSpeedY.w -= 0x200;
+	
 	playerSpeedY.w += 128;
-	if (playerSpeedY.b.h > 0) {
+	if (playerSpeedY.b.h < 0) {
+		processUpKey(-playerSpeedY.b.h);
+		if (!playerYOffset) playerSpeedY.w = 0;
+	} else if (playerSpeedY.b.h > 0) {
 		processDownKey(playerSpeedY.b.h);
 		if (!playerYOffset) playerSpeedY.w = 0;
 	}
 }
 
 
-void processUpKey()
+void processUpKey(char offset)
 {
 	// lookup metatile directly above player
 	// NOTE: hitbox of player is 2 tiles wide, we need to make 2 metatile checks.
@@ -281,19 +286,19 @@ void processUpKey()
 	scrollXOffset = 0;
 	playerXOffset = 0;
 	spriteXOffset = 0;
-	playerYOffset = 0xFFFE;
+	playerYOffset = -offset;
 	
 	// Basic window management.
 	// Keep player centered except when at edge of screen.
 	if (playerY <= 96 || playerY > GSL_getMapHeightInPixels() - 96)
 	{
-		spriteYOffset = 0xFE;
+		spriteYOffset = -offset;
 		scrollYOffset = 0;
 	}
 	else
 	{
 		spriteYOffset = 0;
-		scrollYOffset = 0xFE;
+		scrollYOffset = -offset;
 	}
 }
 
