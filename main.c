@@ -33,7 +33,7 @@ void processSpritesActiveDisplay();
 void processSpritesVBlank();
 void processUserInput();
 void processUpKey();
-void processDownKey();
+void processDownKey(char offset);
 void processLeftKey();
 void processRightKey();
 void processAttackKey();
@@ -45,6 +45,7 @@ unsigned int playerY = 928;
 unsigned char playerSpriteX = 136;
 unsigned char playerSpriteY = 96;
 unsigned char animationCount = 0;
+fixed playerSpeedY;
 
 unsigned char actionCount = 0;
 unsigned char action = ACTION_STATIONARY;
@@ -128,7 +129,7 @@ void main(void)
 			SMS_waitForVBlank(); 
 			GSL_VBlank();  // <<< Call GSL_VBlank to process any pending scroll / metatile updates.
 			processSpritesVBlank();
-			PSGFrame();
+			//PSGFrame(); // FIXME: Disabled for testing
 		} 
 		
 		SMS_displayOff();
@@ -206,7 +207,7 @@ void processUserInput()
 	
 	else if (ks & PORT_A_KEY_DOWN)
 	{
-		processDownKey();
+		processDownKey(2);		
 		return;
 	}
 	
@@ -220,6 +221,12 @@ void processUserInput()
 	{
 		processRightKey();
 		return;
+	}
+	
+	playerSpeedY.w += 128;
+	if (playerSpeedY.b.h > 0) {
+		processDownKey(playerSpeedY.b.h);
+		if (!playerYOffset) playerSpeedY.w = 0;
 	}
 }
 
@@ -291,7 +298,7 @@ void processUpKey()
 }
 
 
-void processDownKey()
+void processDownKey(char offset)
 {
 	// lookup metatile directly below player
 	// NOTE: hitbox of player is 2 tiles wide, we need to make 2 metatile checks.
@@ -341,19 +348,19 @@ void processDownKey()
 	scrollXOffset = 0;
 	playerXOffset = 0;
 	spriteXOffset = 0;
-	playerYOffset = 2;
+	playerYOffset = offset;
 	
 	// Basic window management.
 	// Keep player centered except when at edge of screen.
 	if (playerY < 96 || playerY >= GSL_getMapHeightInPixels() - 96)
 	{
-		spriteYOffset = 2;
+		spriteYOffset = offset;
 		scrollYOffset = 0;
 	}
 	else
 	{
 		spriteYOffset = 0;
-		scrollYOffset = 2;
+		scrollYOffset = offset;
 	}
 }
 
