@@ -5,6 +5,7 @@
 #include "libs\SMSlib.h"
 #include "libs\GSLib.c"
 #include "libs\PSGlib.c"
+#include "actor.h"
 
 #define DIRECTION_UP 			0
 #define DIRECTION_DOWN 			1
