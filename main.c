@@ -217,13 +217,11 @@ void processUserInput()
 	else if (ks & PORT_A_KEY_LEFT)
 	{
 		processLeftKey();
-		return;
 	}
 	
 	else if (ks & PORT_A_KEY_RIGHT)
 	{
 		processRightKey();
-		return;
 	}
 	
 	if (playerIsOnGround && (ks & PORT_A_KEY_1)) playerSpeedY.w -= 0x700;
@@ -273,30 +271,12 @@ void processUpKey(char offset)
 		actionCount = 0;
 		spriteTileOffsets = spriteMoveUp;
 		
-		scrollXOffset = 0;
 		scrollYOffset = 0;
-		playerXOffset = 0;
 		playerYOffset = 0;
-		spriteXOffset = 0;
 		spriteYOffset = 0;
 		
 		return;
 	}
-	
-	// Quality of life code. If the path up is clipped on one side only have the player
-	// shift to the left or right so they can continue up.
-	/*
-	if ((metatilesMetaLUT[topLeftMetatile] & 1) == 1 && (metatilesMetaLUT[topRightMetatile] & 1)  == 0)
-	{
-		processLeftKey();
-		return;
-	}
-	if ((metatilesMetaLUT[topLeftMetatile] & 1) == 0 && (metatilesMetaLUT[topRightMetatile] & 1)  == 1)
-	{
-		processRightKey();
-		return;
-	}
-	*/
 	
 	// Movement up is passable. Process movement
 	action = ACTION_MOVE;
@@ -305,9 +285,6 @@ void processUpKey(char offset)
 	actionCount = 0;
 	spriteTileOffsets = spriteMoveUp;
 	
-	scrollXOffset = 0;
-	playerXOffset = 0;
-	spriteXOffset = 0;
 	playerYOffset = -offset;
 	
 	// Basic window management.
@@ -353,30 +330,12 @@ void processDownKey(char offset)
 		actionCount = 0;
 		spriteTileOffsets = spriteMoveDown;
 		
-		scrollXOffset = 0;
 		scrollYOffset = 0;
-		playerXOffset = 0;
 		playerYOffset = 0;
-		spriteXOffset = 0;
 		spriteYOffset = 0;
 		
 		return;
 	}
-	
-	// Quality of life code. If the path down is clipped on one side only have the player
-	// shift to the left or right so they can continue down.
-	/*
-	if ((metatilesMetaLUT[bottomLeftMetatile] & 1) == 1 && (metatilesMetaLUT[bottomRightMetatile] & 1) == 0)
-	{
-		processLeftKey();
-		return;
-	}
-	if ((metatilesMetaLUT[bottomLeftMetatile] & 1) == 0 && (metatilesMetaLUT[bottomRightMetatile] & 1) == 1)
-	{
-		processRightKey();
-		return;
-	}
-	*/
 	
 	// Movement down is passable. Process movement
 	action = ACTION_MOVE;
@@ -385,9 +344,6 @@ void processDownKey(char offset)
 	actionCount = 0;
 	spriteTileOffsets = spriteMoveDown;
 	
-	scrollXOffset = 0;
-	playerXOffset = 0;
-	spriteXOffset = 0;
 	playerYOffset = offset;
 	
 	// Basic window management.
@@ -418,7 +374,7 @@ void processLeftKey()
 		action = ACTION_MOVE;
 		direction = DIRECTION_LEFT;
 		animationCount = (animationCount - 1) & 3;
-		actionCount = 4;
+		actionCount = 0;
 		spriteTileOffsets = spriteMoveLeft;
 		
 		scrollXOffset = 0;
@@ -435,7 +391,7 @@ void processLeftKey()
 	action = ACTION_MOVE;
 	direction = DIRECTION_LEFT;
 	animationCount = (animationCount - 1) & 3;
-	actionCount = 4;
+	actionCount = 0;
 	spriteTileOffsets = spriteMoveLeft;
 	
 	playerXOffset = 0xFFFE;
@@ -472,7 +428,7 @@ void processRightKey()
 		action = ACTION_MOVE;
 		direction = DIRECTION_RIGHT;
 		animationCount = (animationCount - 1) & 3;
-		actionCount = 4;
+		actionCount = 0;
 		spriteTileOffsets = spriteMoveRight;
 		
 		scrollXOffset = 0;
@@ -489,7 +445,7 @@ void processRightKey()
 	action = ACTION_MOVE;
 	direction = DIRECTION_RIGHT;
 	animationCount = (animationCount - 1) & 3;
-	actionCount = 4;
+	actionCount = 0;
 	spriteTileOffsets = spriteMoveRight;
 	
 	playerXOffset = 2;
