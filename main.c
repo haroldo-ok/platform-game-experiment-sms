@@ -104,6 +104,8 @@ void main(void)
 		playerSpriteX = 136;
 		playerSpriteY = 96;
 		actionCount = 0;
+		playerIsOnGround = 0;
+		playerSpeedY.w = 0;
 		
 		for(;;)
 		{
@@ -289,6 +291,7 @@ void processUpKey(char offset)
 	
 	// Basic window management.
 	// Keep player centered except when at edge of screen.
+	/*
 	if (playerY <= 96 || playerY > GSL_getMapHeightInPixels() - 96)
 	{
 		spriteYOffset = -offset;
@@ -299,6 +302,9 @@ void processUpKey(char offset)
 		spriteYOffset = 0;
 		scrollYOffset = -offset;
 	}
+	*/
+	spriteYOffset = 0;
+	scrollYOffset = -offset;
 }
 
 
@@ -348,6 +354,7 @@ void processDownKey(char offset)
 	
 	// Basic window management.
 	// Keep player centered except when at edge of screen.
+	/*
 	if (playerY < 96 || playerY >= GSL_getMapHeightInPixels() - 96)
 	{
 		spriteYOffset = offset;
@@ -358,6 +365,9 @@ void processDownKey(char offset)
 		spriteYOffset = 0;
 		scrollYOffset = offset;
 	}
+	*/
+	spriteYOffset = 0;
+	scrollYOffset = offset;
 }
 
 
