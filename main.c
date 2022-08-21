@@ -115,7 +115,7 @@ void main(void)
 			
 			SMS_initSprites(); 
 			ks = SMS_getKeysStatus(); 
-			if (!(ks & PORT_A_KEY_2)) actionButtonWatch = 0;
+			if (!(ks & PORT_A_KEY_1)) actionButtonWatch = 0;
 			
 			// Player actions take so many steps to complete. 
 			//   if actionCount == 0 then new actions can be started.
@@ -199,23 +199,12 @@ void processUserInput()
 	spriteXOffset = 0;
 	spriteYOffset = 0;
 	
-	if (actionButtonWatch == 0 && (ks & PORT_A_KEY_2))
+	if (actionButtonWatch == 0 && (ks & PORT_A_KEY_1))
 	{
 		processAttackKey();
 		return;
 	}
-	else if (ks & PORT_A_KEY_UP)
-	{
-		processUpKey(2);
-		return;
-	}
-	
-	else if (ks & PORT_A_KEY_DOWN)
-	{
-		processDownKey(2);		
-		return;
-	}
-	
+
 	else if (ks & PORT_A_KEY_LEFT)
 	{
 		processLeftKey();
@@ -226,7 +215,7 @@ void processUserInput()
 		processRightKey();
 	}
 	
-	if (playerIsOnGround && (ks & PORT_A_KEY_1)) playerSpeedY.w -= 0x700;
+	if (playerIsOnGround && (ks & PORT_A_KEY_2)) playerSpeedY.w -= 0x700;
 	
 	playerSpeedY.w += 128;
 	if (playerSpeedY.w > TERMINAL_VELOCITY) playerSpeedY.w = TERMINAL_VELOCITY;
